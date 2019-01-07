@@ -1,0 +1,19 @@
+SELECT title, year, cat FROM yrb_book WHERE LOCATE (cat, LOWER(title)) > 0
+
+SELECT COUNT(CASE WHEN club = 'Basic' then 1 end) #BASIC, COUNT(CASE WHEN club = 'AAA' then 1 end) #AAA FROM yrb_member
+
+SELECT A.name AS customera, B.name AS customerb FROM (SELECT C.name, P.cid, P.title, P.year FROM yrb_purchase P INNER JOIN yrb_customer C ON P.cid = C.cid) AS A, (SELECT C.name, P.cid, P.title, P.year FROM yrb_purchase P INNER JOIN yrb_customer C ON P.cid = C.cid) AS B WHERE A.title = B.title AND A.year = B.year AND A.cid> B.cid GROUP BY A.cid, A.name, B.cid, B.name
+
+WITH new AS (SELECT club, COUNT(club) AS count FROM yrb_member GROUP BY club) SELECT * FROM new WHERE count = (SELECT MIN(count) FROM new)
+
+SELECT C.name, B.cat, SUM(O.price) AS cost FROM yrb_purchase AS P INNER JOIN yrb_book AS B ON P.title = B.title AND P.year = B.year INNER JOIN yrb_customer AS C ON P.cid = C.cid INNER JOIN yrb_offer AS O ON P.club = O.club AND P.title = O.title AND P.year = O.year GROUP BY C.name, C.cid, B.cat
+
+SELECT X.cid, yrb_customer.name FROM (SELECT DISTINCT O.cid FROM (SELECT M.cid, P.club FROM yrb_member M LEFT OUTER JOIN yrb_purchase P ON M.cid = P.cid AND M.club = P.club) AS O WHERE O.club IS NULL) AS X INNER JOIN yrb_customer ON X.cid = yrb_customer.cid
+
+SELECT A.name, A.cat, A.cost FROM (SELECT X.name, X.cid, X.cat, SUM(X.price) AS cost FROM (SELECT C.name, C.cid, P.title, B.cat, O.price FROM yrb_purchase AS P INNER JOIN yrb_customer AS C ON P.cid = C.cid INNER JOIN yrb_book AS B ON P.title = B.title AND P.year = B.year INNER JOIN yrb_offer AS O ON P.club = O.club AND P.title = O.title AND P.year = O.year) AS X GROUP BY X.name, X.cid, X.cat) AS A INNER JOIN (SELECT Y.name, Y.cid, MAX(Y.cost) AS max_cost FROM (SELECT X.name, X.cid, X.cat, SUM(X.price) AS cost FROM (SELECT C.name, C.cid, P.title, B.cat, O.price FROM yrb_purchase AS P INNER JOIN yrb_customer AS C ON P.cid = C.cid INNER JOIN yrb_book AS B ON P.title = B.title AND P.year = B.year INNER JOIN yrb_offer AS O ON P.club = O.club AND P.title = O.title AND P.year = O.year) AS X GROUP BY X.name, X.cid, X.cat) AS Y GROUP BY Y.name, Y.cid) AS B ON A.name = B.name AND A.cid = B.cid AND A.cost = B.max_cost
+
+SELECT X.title, X.year FROM (SELECT title, year, COUNT(title) AS count FROM yrb_offer GROUP BY title, year) AS X WHERE X.count = 8
+
+SELECT title, year, price FROM yrb_offer WHERE price > (SELECT AVG (max_price) AS price FROM (SELECT club, MAX(price) AS max_price FROM (SELECT club, price FROM yrb_offer AS O INNER JOIN yrb_book AS B ON O.title = B.title AND O.year = B.year AND B.language = 'English') GROUP BY club))
+
+SELECT cid, CHAR(CAST(when AS DATE), USA) AS day, (Q.cost + S.cost) AS cost FROM (SELECT cid, when, SUM(cost) AS cost, SUM(weight) AS sum_weight FROM (SELECT cid, P.club, P.title, P.year, P.when, (qnty * price) AS cost, (qnty * weight) AS weight FROM yrb_purchase AS P INNER JOIN yrb_offer as O ON P.club = O.club AND P.title = O.title AND P.year = O.year INNER JOIN yrb_book AS B ON P.title = B.title AND P.year = B.year) GROUP BY cid, when ORDER BY cid) AS Q LEFT OUTER JOIN yrb_shipping AS S ON (sum_weight/500)*500 + 500 = S.weight

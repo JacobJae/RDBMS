@@ -1,0 +1,1 @@
+SELECT title, year, price FROM yrb_offer WHERE price > (SELECT AVG (max_price) AS price FROM (SELECT club, MAX(price) AS max_price FROM (SELECT club, price FROM yrb_offer AS O INNER JOIN yrb_book AS B ON O.title = B.title AND O.year = B.year AND B.language = 'English') GROUP BY club))

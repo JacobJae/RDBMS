@@ -1,0 +1,1 @@
+WITH new AS (SELECT club, COUNT(club) AS count FROM yrb_member GROUP BY club) SELECT * FROM new WHERE count = (SELECT MIN(count) FROM new)

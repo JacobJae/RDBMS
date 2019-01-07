@@ -1,0 +1,9 @@
+Windows10 cmd/powershell 이용해서 
+	ssh 사용자명@호스트
+로 들어가면 비번치고 prism 접근
+prism에서 db2 치면 데이터베이스 접근
+db2 상태에서 백스페이스 안먹힐 때 고치는법
+
+red 116 % stty erase (여기서 ctrl + v + backspace 누르면 ^H라고 뜸, 그럼 엔터치면 되)
+
+다시 db2 들어가서 백스페이스 해보면 잘됨

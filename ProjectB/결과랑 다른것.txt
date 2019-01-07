@@ -1,0 +1,7 @@
+3. pairs
+	282개 나와야 되는데 283개나옴 이건 틀린듯
+
+5. categories 
+	ORDER BY C.cid 붙이면 똑같음
+10. cost
+	순서 이상한데 데이터는 같음

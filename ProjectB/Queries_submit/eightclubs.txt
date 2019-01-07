@@ -1,0 +1,1 @@
+SELECT X.title, X.year FROM (SELECT title, year, COUNT(title) AS count FROM yrb_offer GROUP BY title, year) AS X WHERE X.count = 8

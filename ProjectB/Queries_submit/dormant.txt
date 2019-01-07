@@ -1,0 +1,1 @@
+SELECT X.cid, yrb_customer.name FROM (SELECT DISTINCT O.cid FROM (SELECT M.cid, P.club FROM yrb_member M LEFT OUTER JOIN yrb_purchase P ON M.cid = P.cid AND M.club = P.club) AS O WHERE O.club IS NULL) AS X INNER JOIN yrb_customer ON X.cid = yrb_customer.cid

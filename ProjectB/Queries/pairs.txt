@@ -1,0 +1,1 @@
+SELECT A.name AS customera, B.name AS customerb FROM (SELECT C.name, P.cid, P.title, P.year FROM yrb_purchase P INNER JOIN yrb_customer C ON P.cid = C.cid) AS A, (SELECT C.name, P.cid, P.title, P.year FROM yrb_purchase P INNER JOIN yrb_customer C ON P.cid = C.cid) AS B WHERE A.title = B.title AND A.year = B.year AND A.cid> B.cid GROUP BY A.cid, A.name, B.cid, B.name

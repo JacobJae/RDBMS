@@ -1,0 +1,1 @@
+SELECT COUNT(CASE WHEN club = 'Basic' then 1 end) #BASIC, COUNT(CASE WHEN club = 'AAA' then 1 end) #AAA FROM yrb_member

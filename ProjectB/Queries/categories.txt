@@ -1,0 +1,1 @@
+SELECT C.name, B.cat, SUM(O.price) AS cost FROM yrb_purchase AS P INNER JOIN yrb_book AS B ON P.title = B.title AND P.year = B.year INNER JOIN yrb_customer AS C ON P.cid = C.cid INNER JOIN yrb_offer AS O ON P.club = O.club AND P.title = O.title AND P.year = O.year GROUP BY C.name, C.cid, B.cat
